@@ -148,7 +148,11 @@ export async function ssgBuild({
 			inputBuffer = res?.data;
 			expires = res?.expires || 0;
 		} else {
-			const inputFileURL = new URL(`.${src}`, outDir);
+			let inputFileBase = outDir.toString();
+			if (config.output === 'server') {
+				inputFileBase = inputFileBase.replace(/client\/$/, 'server/');
+			}
+			const inputFileURL = new URL(`.${src}`, inputFileBase);
 			inputFile = fileURLToPath(inputFileURL);
 
 			const res = await loadLocalImage(inputFile);
